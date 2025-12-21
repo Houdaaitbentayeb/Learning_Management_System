@@ -112,7 +112,7 @@ public class AssignmentControllerTest {
         assertEquals(200, response.getStatusCodeValue());
         assertEquals("Assignment feedback is saved successfully.", response.getBody());
 
-        verify(assignmentService, times(1)).saveAssignmentFeedback(eq(1), eq(1), eq("done"), eq(request));
+        verify(assignmentService, times(1)).saveAssignmentFeedback(eq(1), eq(1), eq("Good job"), eq(request));
     }
 
 
