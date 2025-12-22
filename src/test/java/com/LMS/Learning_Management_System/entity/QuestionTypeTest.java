@@ -292,8 +292,8 @@ class QuestionTypeTest {
     @Test
     @DisplayName("Test enum equals")
     void testEnumEquals() {
-        assertTrue(MCQ.equals(MCQ), "MCQ doit être égal à MCQ");
-        assertFalse(MCQ.equals(TRUE_FALSE), "MCQ ne doit pas être égal à TRUE_FALSE");
-        assertFalse(TRUE_FALSE.equals(SHORT_ANSWER), "TRUE_FALSE ne doit pas être égal à SHORT_ANSWER");
+        assertSame(MCQ, MCQ, "MCQ doit être égal à MCQ");
+        assertNotSame(MCQ, TRUE_FALSE, "MCQ ne doit pas être égal à TRUE_FALSE");
+        assertNotSame(TRUE_FALSE, SHORT_ANSWER, "TRUE_FALSE ne doit pas être égal à SHORT_ANSWER");
     }
 }
