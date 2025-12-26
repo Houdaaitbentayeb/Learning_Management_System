@@ -23,6 +23,10 @@ public class EnrollmentService {
     private final NotificationsService notificationsService;
     private final SessionAuthService sessionAuthService;
 
+    private static final String ERR_COURSE_NOT_FOUND_PREFIX = "No course found with the given ID: ";
+    private static final String ERR_STUDENT_NOT_FOUND = "No student found with the given ID.";
+
+
 
     public EnrollmentService(EnrollmentRepository enrollmentRepository, StudentRepository studentRepository, CourseRepository courseRepository, NotificationsService notificationsService, SessionAuthService sessionAuthService) {
         this.enrollmentRepository = enrollmentRepository;
@@ -43,11 +47,11 @@ public class EnrollmentService {
         }
 
         Student student = studentRepository.findById(enrollmentRequest.getStudent().getUserAccountId())
-                .orElseThrow(() -> new IllegalArgumentException("No student found with the given ID."));
+                .orElseThrow(() -> new IllegalArgumentException(ERR_STUDENT_NOT_FOUND));
 
         int courseId = enrollmentRequest.getCourse().getCourseId();
         Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new IllegalArgumentException("No course found with the given ID: " + courseId));
+                .orElseThrow(() -> new IllegalArgumentException(ERR_COURSE_NOT_FOUND_PREFIX + courseId));
 
         boolean isEnrolled = enrollmentRepository.existsByStudentAndCourse(student, course);
         if (isEnrolled) {
@@ -87,7 +91,7 @@ public class EnrollmentService {
     public void removeEnrolledStudent(int courseId, int studentId, HttpServletRequest request){
         Course course = check_course_logic(courseId , request);
         Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new IllegalArgumentException("No student found with the given ID."));
+                .orElseThrow(() -> new IllegalArgumentException(ERR_STUDENT_NOT_FOUND));
         boolean isEnrolled = enrollmentRepository.existsByStudentAndCourse(student, course);
         if(!isEnrolled){
             throw new IllegalArgumentException("This student is not enrolled in this course");
@@ -108,7 +112,7 @@ public class EnrollmentService {
             throw new IllegalArgumentException("Logged-in user is not an Instructor or Admin.");
         }
         Course existingCourse = courseRepository.findById(courseId)
-                .orElseThrow(() -> new IllegalArgumentException("No course found with the given ID: " + courseId));
+                .orElseThrow(() -> new IllegalArgumentException(ERR_COURSE_NOT_FOUND_PREFIX + courseId));
 
         if (loggedInUser.getUserTypeId().getUserTypeId() == 3 &&
                 existingCourse.getInstructorId().getUserAccountId() != loggedInUser.getUserId()) {
@@ -128,7 +132,7 @@ public class EnrollmentService {
             throw new IllegalArgumentException("Logged-in user is not an instructor.");
         }
         Course existingCourse = courseRepository.findById(courseId)
-                .orElseThrow(() -> new IllegalArgumentException("No course found with the given ID: " + courseId));
+                .orElseThrow(() -> new IllegalArgumentException(ERR_COURSE_NOT_FOUND_PREFIX + courseId));
 
         if (existingCourse.getInstructorId() == null ||
                 existingCourse.getInstructorId().getUserAccountId() != loggedInInstructor.getUserId()) {

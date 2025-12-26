@@ -21,6 +21,9 @@ public class LessonService {
     private final StudentRepository studentRepository;
     private final SessionAuthService sessionAuthService;
 
+    private static final String ERR_NO_SUCH_COURSE_ID = "No such CourseId";
+
+
     public LessonService(LessonRepository lessonRepository, CourseRepository courseRepository, EnrollmentRepository enrollmentRepository, LessonAttendanceRepository lessonAttendanceRepository, StudentRepository studentRepository, SessionAuthService sessionAuthService) {
         this.lessonRepository = lessonRepository;
         this.courseRepository = courseRepository;
@@ -40,7 +43,7 @@ public class LessonService {
             throw new IllegalArgumentException("Logged-in user is not an instructor.");
         }
         Course course = courseRepository.findById(lesson.getCourseId().getCourseId())
-                .orElseThrow(() -> new IllegalArgumentException("No such CourseId"));
+                .orElseThrow(() -> new IllegalArgumentException(ERR_NO_SUCH_COURSE_ID));
 
         int ids = course.getInstructorId().getUserAccountId();
         if (loggedInInstructor.getUserId() != ids) {
@@ -62,7 +65,7 @@ public class LessonService {
 
     public List<LessonDto> getLessonsByCourseId(int courseId, HttpServletRequest request) {
 
-        Course course = courseRepository.findById(courseId).orElseThrow(() -> new IllegalArgumentException("No such CourseId"));
+        Course course = courseRepository.findById(courseId).orElseThrow(() -> new IllegalArgumentException(ERR_NO_SUCH_COURSE_ID));
         Users loggedInInstructor = sessionAuthService.requireUser(request);
         if (loggedInInstructor == null) {
             throw new IllegalArgumentException("No user is logged in.");
@@ -111,7 +114,7 @@ public class LessonService {
             throw new IllegalArgumentException("Logged-in user is not an instructor.");
         }
         Course course = courseRepository.findById(updatedLesson.getCourseId().getCourseId())
-                .orElseThrow(() -> new IllegalArgumentException("No such CourseId"));
+                .orElseThrow(() -> new IllegalArgumentException(ERR_NO_SUCH_COURSE_ID));
 
         int ids = course.getInstructorId().getUserAccountId();
         if (loggedInInstructor.getUserId() != ids) {

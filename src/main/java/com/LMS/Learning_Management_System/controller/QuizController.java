@@ -25,7 +25,7 @@ public class QuizController {
     }
 
     @GetMapping("/quiz_id/{id}")
-    public ResponseEntity<?> getQuizById(@PathVariable int id, HttpServletRequest request) {
+    public ResponseEntity<Object> getQuizById(@PathVariable int id, HttpServletRequest request) {
         try {
             QuizDto quizDTO = quizService.getQuizByID(id , request);
             return ResponseEntity.ok(quizDTO);
@@ -34,7 +34,7 @@ public class QuizController {
         }
     }
     @GetMapping("/active_quiz/{course_id}")
-    public ResponseEntity<?> getActiveQuiz(@PathVariable int course_id, HttpServletRequest request) {
+    public ResponseEntity<Object> getActiveQuiz(@PathVariable int course_id, HttpServletRequest request) {
         try {
             String quiz_id = quizService.getActiveQuiz(course_id , request);
             return ResponseEntity.ok(quiz_id);
@@ -44,7 +44,7 @@ public class QuizController {
     }
 
     @PostMapping("/add_quiz")
-    public ResponseEntity<?> addQuiz(@RequestBody QuizDto quizDto, HttpServletRequest request)
+    public ResponseEntity<Object> addQuiz(@RequestBody QuizDto quizDto, HttpServletRequest request)
     {
         try {
             int quiz_id = quizService.Create(quizDto.getCourse_id(),quizDto.getType(), request);
@@ -54,7 +54,7 @@ public class QuizController {
         }
     }
     @PostMapping("/add_questions_bank")
-    public ResponseEntity<?> addQuestionsBank(@RequestBody QuizDto quizDto, HttpServletRequest request)
+    public ResponseEntity<Object> addQuestionsBank(@RequestBody QuizDto quizDto, HttpServletRequest request)
     {
         try {
             quizService.createQuestionBank(quizDto.getCourse_id(),quizDto.getQuestionList(),request);
@@ -64,7 +64,7 @@ public class QuizController {
         }
     }
     @PostMapping("/add_questions")
-    public ResponseEntity<?> addQuestions(@RequestBody QuestionDto questionDto, HttpServletRequest request)
+    public ResponseEntity<Object> addQuestions(@RequestBody QuestionDto questionDto, HttpServletRequest request)
     {
         try {
             quizService.addQuestion(questionDto,request);
@@ -75,7 +75,7 @@ public class QuizController {
     }
 
     @GetMapping("/get_question_bank/{id}")
-    public ResponseEntity<?> getQuestionBank(@PathVariable int id, HttpServletRequest request)
+    public ResponseEntity<Object> getQuestionBank(@PathVariable int id, HttpServletRequest request)
     {
         try {
             QuizDto quizDto=quizService.getQuestionBank(id,request);
@@ -86,7 +86,7 @@ public class QuizController {
     }
 
     @PostMapping("/grade_quiz")
-    public ResponseEntity<?> gradeQuiz(@RequestBody GradingDto gradingDto, HttpServletRequest request)
+    public ResponseEntity<Object> gradeQuiz(@RequestBody GradingDto gradingDto, HttpServletRequest request)
     {
         try {
             quizService.gradeQuiz(gradingDto,request);
@@ -98,7 +98,7 @@ public class QuizController {
 
     // get student quiz grades
     @GetMapping("/get_quiz_grade/{quiz_id}/student/{student_id}")
-    public ResponseEntity<?> getQuizGradeByStudent(@PathVariable int quiz_id,@PathVariable int student_id, HttpServletRequest request)
+    public ResponseEntity<Object> getQuizGradeByStudent(@PathVariable int quiz_id,@PathVariable int student_id, HttpServletRequest request)
     {
         try {
             int grade=quizService.quizFeedback(quiz_id,student_id,request);
@@ -110,7 +110,7 @@ public class QuizController {
 
     // get quiz questions
     @GetMapping("/get_quiz_questions/{id}")
-    public ResponseEntity<?> getQuizQuestions(@PathVariable int id, HttpServletRequest request)
+    public ResponseEntity<Object> getQuizQuestions(@PathVariable int id, HttpServletRequest request)
     {
         try {
             return ResponseEntity.ok(quizService.getQuizQuestions(id,request));

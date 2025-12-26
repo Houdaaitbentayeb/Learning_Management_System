@@ -25,7 +25,7 @@ public class EnrollmentController {
         }
     }
     @GetMapping("/view_enrolled_students/{courseId}")
-    public ResponseEntity<?> viewEnrolledStudents(@PathVariable int courseId, HttpServletRequest request){
+    public ResponseEntity<Object> viewEnrolledStudents(@PathVariable int courseId, HttpServletRequest request){
         try {
             List<StudentDto> students = enrollmentService.viewEnrolledStudents(courseId , request);
             return ResponseEntity.ok(students);

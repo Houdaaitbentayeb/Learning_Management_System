@@ -31,7 +31,7 @@ public class CourseController {
         }
     }
     @GetMapping("/course_id/{id}")
-    public ResponseEntity<?> getCourseById(@PathVariable int id, HttpServletRequest request) {
+    public ResponseEntity<Object> getCourseById(@PathVariable int id, HttpServletRequest request) {
         try {
             CourseDto courseDTO = courseService.getCourseById(id , request);
             return ResponseEntity.ok(courseDTO);
@@ -40,7 +40,7 @@ public class CourseController {
         }
     }
     @GetMapping("/all_courses")
-    public ResponseEntity<?> getAllCourses(HttpServletRequest request) {
+    public ResponseEntity<Object> getAllCourses(HttpServletRequest request) {
         try {
             List<CourseDto> courseDTOList = courseService.getAllCourses(request);
             return ResponseEntity.ok(courseDTOList);

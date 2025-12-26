@@ -19,6 +19,9 @@ public class AssignmentService {
     private final StudentRepository studentRepository;
     private final EnrollmentRepository enrollmentRepository;
     private final SessionAuthService sessionAuthService;
+    private static final String ERR_ASSIGNMENT_NOT_FOUND = "Assignment not found";
+    private static final String ERR_STUDENT_NOT_FOUND = "Student not found";
+
 
     public AssignmentService(AssignmentRepository assignmentRepository,
                              SubmissionRepository submissionRepository,
@@ -67,12 +70,12 @@ public class AssignmentService {
         Users instructor = requireLoggedInForInstructorActions(request);
 
         Assignment assignment = assignmentRepository.findById(assigID)
-                .orElseThrow(() -> new IllegalArgumentException("Assignment not found"));
+                .orElseThrow(() -> new IllegalArgumentException(ERR_ASSIGNMENT_NOT_FOUND));
 
         ensureInstructorOwnsCourse(instructor, assignment.getCourseID());
 
         Student student = studentRepository.findById(studentID)
-                .orElseThrow(() -> new IllegalArgumentException("Student not found"));
+                .orElseThrow(() -> new IllegalArgumentException(ERR_STUDENT_NOT_FOUND));
 
         Submission submission = findSubmissionOrThrow(student, assignment);
         submission.setGrade(grade);
@@ -83,12 +86,12 @@ public class AssignmentService {
         Users instructor = requireLoggedInForInstructorActions(request);
 
         Assignment assignment = assignmentRepository.findById(assigID)
-                .orElseThrow(() -> new IllegalArgumentException("Assignment not found"));
+                .orElseThrow(() -> new IllegalArgumentException(ERR_ASSIGNMENT_NOT_FOUND));
 
         ensureInstructorOwnsCourse(instructor, assignment.getCourseID());
 
         Student student = studentRepository.findById(studentID)
-                .orElseThrow(() -> new IllegalArgumentException("Student not found"));
+                .orElseThrow(() -> new IllegalArgumentException(ERR_STUDENT_NOT_FOUND));
 
         Submission submission = findSubmissionOrThrow(student, assignment);
         submission.setFeedback(feedback);
@@ -99,10 +102,10 @@ public class AssignmentService {
         Users loggedInUser = requireLoggedInForStudentActions(request);
 
         Assignment assignment = assignmentRepository.findById(assigID)
-                .orElseThrow(() -> new IllegalArgumentException("Assignment not found"));
+                .orElseThrow(() -> new IllegalArgumentException(ERR_ASSIGNMENT_NOT_FOUND));
 
         Student student = studentRepository.findById(loggedInUser.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("You're not a student"));
+                .orElseThrow(() -> new IllegalArgumentException(ERR_STUDENT_NOT_FOUND));
 
         ensureEnrolled(student, assignment.getCourseID());
 
